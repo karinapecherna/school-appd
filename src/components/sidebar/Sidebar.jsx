@@ -1,5 +1,5 @@
 "use client";
-import "./Sidebar.module.css";
+import styles from "./Sidebar.module.css";
 import React from "react";
 
 import {
@@ -24,20 +24,19 @@ const navItems = [
 
 export default function Sidebar() {
   return (
-    <aside className="sidebar-container">
-      <div className="d-flex flex-column justify-content-center mb-6">
-        <div className="logo-container">
-          <img src="/3.svg" alt="Logo" className="logo-image" />
-        </div>
-
-        {navItems.map((item, index) => (
-          <a key={index} href={item.link}>
-            <div>
-              {item.icon} {item.text} 
-            </div>
-          </a>
-        ))}
+    <aside className={styles.sidebarContainer}>
+      <div className={styles.logoContainer}>
+        <img src="/3.svg" alt="Logo" className={styles.logoImage} />
       </div>
+
+      {navItems.map((item, index) => (
+        <a key={index} href={item.link} className={styles.navItem}>
+          <span>{item.icon}</span>
+          <span style={{ marginLeft: '10px' }}>{item.text}</span>
+        </a>
+      ))}
     </aside>
   );
 }
+
+
