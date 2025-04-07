@@ -1,5 +1,5 @@
 "use client";
-import "./SheduleTable.module.css";
+import styles from "./SheduleTable.module.css";
 import React from "react";
 
 const schedule = {
@@ -47,19 +47,19 @@ const schedule = {
 
 const ScheduleTable = () => {
   return (
-    <div className="schedule-container">
+    <div className={styles.scheduleContainer}>
       {Object.entries(schedule).map(([day, lessons]) => (
         <React.Fragment key={day}>
-          <div className="day-heading">{day}</div>
+          <div className={styles.dayHeading}>{day}</div>
           {lessons.map((lesson, idx) =>
             typeof lesson === "string" ? (
-              <div key={idx} className="break">
+              <div key={idx} className={styles.break}>
                 {lesson}
               </div>
             ) : (
-              <div key={idx} className="lesson">
-                <div className="lesson-name">{lesson.subject}</div>
-                <div className="lesson-time">{lesson.time}</div>
+              <div key={idx} className={styles.lesson}>
+                <div className={styles.lessonName}>{lesson.subject}</div>
+                <div className={styles.lessonTime}>{lesson.time}</div>
               </div>
             )
           )}
