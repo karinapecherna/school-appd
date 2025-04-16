@@ -1,5 +1,11 @@
-import Sidebar from "@/components/sidebar/Sidebar";
+
 import "../app/globals.css";
+import {Montserrat} from "next/font/google";
+
+const shrift = Montserrat({
+  subsets: ["cyrillic"],
+  weight: ["400", "700"],
+});
 
 export const metadata = {
   title: "School App",

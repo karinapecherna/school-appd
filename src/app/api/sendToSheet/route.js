@@ -6,7 +6,7 @@ const credentials = {
   spreadsheetId: process.env.SPREADSHEET_ID,
 };
 
-async function sendDataToSheet(data, sheetIndex) {
+async function sendDataToSheet(dataArray) {
   const auth = new google.auth.JWT(
     credentials.client_email,
     null,
@@ -16,34 +16,29 @@ async function sendDataToSheet(data, sheetIndex) {
 
   const sheets = google.sheets({ version: 'v4', auth });
 
-  const ranges = [
-    'Пн!A2:F10',
-    'Вт!A2:F10',
-    'Ср!A2:F10',
-    'Чт!A2:F10',
-    'Пт!A2:F10'
-  ];
+  const ranges = ['Пн!B2:F100', 'Вт!B2:F100', 'Ср!B2:F100', 'Чт!B2:F100', 'Пт!B2:F100'];
 
-  const response = await sheets.spreadsheets.values.append({
-    spreadsheetId: credentials.spreadsheetId,
-    range: ranges[sheetIndex], // Use the sheetIndex to select the range dynamically
-    valueInputOption: 'RAW',
-    requestBody: {
-      values: [data],
-    },
-  });
+  const responses = await Promise.all(
+    dataArray.map((data, index) => {
+      return sheets.spreadsheets.values.append({
+        spreadsheetId: credentials.spreadsheetId,
+        range: ranges[index],
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [[data.first, data.second, data.snack]],
+        },
+      });
+    })
+  );
 
-  return response.data;
+  return responses;
 }
 
 export async function POST(req) {
   try {
-    const formData = await req.json();
-    const result = await sendDataToSheet(
-      [formData.name, formData.first, formData.second, formData.snack],
-      formData.sheetIndex // Pass the sheetIndex to the backend
-    );
-    return new Response(JSON.stringify({ success: true, result }), { status: 200 });
+    const { allDaysData } = await req.json();
+    await sendDataToSheet(allDaysData);
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
     console.error('Error:', error);
     return new Response(JSON.stringify({ success: false, error: error.message }), { status: 500 });

@@ -1,4 +1,5 @@
-import Sidebar from "@/components/sidebar/Sidebar"; // шлях до твого компонента
+import Sidebar from "@/components/sidebar/Sidebar";
+
 
 export default function Home() {
   return (
